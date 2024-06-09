@@ -1,3 +1,0 @@
-ansible_network_os: ios
-ansible_ssh_user: ansnet
-ansible_ssh_private_key_file: ~/.ssh/ansnet
