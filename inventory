@@ -1,2 +1,18 @@
 [cisco_routers]
-192.168.10.1
+R1 ansible_host=10.10.90.1
+
+[core_cisco_switches]
+Core1 ansible_host=10.10.90.201
+
+[dist_cisco_switches]
+Dist1 ansible_host=10.10.90.202
+
+[access_cisco_switches]
+AS1 ansible_host=10.10.90.203
+AS2 ansible_host=10.10.90.204
+AS3 ansible_host=10.10.90.205
+
+[cisco_switches:children]
+core_cisco_switches
+dist_cisco_switches
+access_cisco_switches

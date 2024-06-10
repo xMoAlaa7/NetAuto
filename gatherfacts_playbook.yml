@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  gather_subset: interfaces
+  module_defaults:
+    cisco.ios.ios_facts:
+      gather_network_resources: interfaces
+  tasks:
+
+  - name: View interfaces
+    debug:
+      msg: "{{ ansible_net_interfaces }}"
