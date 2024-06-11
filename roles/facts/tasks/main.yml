@@ -1,0 +1,9 @@
+- name: Parsing facts
+  cisco.ios.ios_facts:
+   gather_network_resources: interfaces
+  tags: typeB
+
+- name: View interfaces
+  debug:
+    msg: "{{ ansible_net_interfaces }}"
+  tags: typeB

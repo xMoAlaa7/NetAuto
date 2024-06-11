@@ -1,12 +1,10 @@
 ---
 
 - hosts: all
-  gather_subset: interfaces
-  module_defaults:
-    cisco.ios.ios_facts:
-      gather_network_resources: interfaces
+  gather_subset: all
   tasks:
 
-  - name: View interfaces
-    debug:
-      msg: "{{ ansible_net_interfaces }}"
+    - name: Add roles for gathering facts
+      include_role:
+        name: facts
+      tags: typeA
