@@ -1,0 +1,16 @@
+---
+
+- name: L3 Interface Configuration
+  hosts: cisco_routers
+  gather_facts: false
+  tasks:
+
+    - name: Parse L3 Interfaces defined in parsed.cfg
+      cisco.ios.ios_l3_interfaces:
+        running_config: "{{ lookup('file', 'parsed.cfg') }}"
+        state: parsed
+      register: conf
+
+    - name: View parsed facts
+      debug:
+        var: conf

@@ -1,0 +1,15 @@
+---
+
+- name: L3 Interface Configuration
+  hosts: cisco_routers
+  gather_facts: false
+  tasks:
+
+    - name: Gather L3 Interface Running Configuration
+      cisco.ios.ios_l3_interfaces:
+        state: gathered
+      register: conf
+
+    - name: View gathered facts
+      debug:
+        var: conf
