@@ -1,0 +1,39 @@
+---
+
+- hosts: cisco_routers
+  gather_facts: false
+  tasks:
+
+    - name: Backup configuration
+      cisco.ios.ios_config:
+        backup: true
+        backup_options:
+          filename: R1_config_before
+
+    - name: Configure DHCP pools
+      vars:
+        pools:
+          Servers:
+            excluded_address: "ip dhcp excluded-address 10.10.100.1"
+            default_router_ip: "default-router 10.10.100.1"
+            network_id: "network 10.10.100.0 255.255.255.0"
+            parent: "ip dhcp pool Servers"
+          OP:
+            excluded_address: "ip dhcp excluded-address 10.10.110.1"
+            default_router_ip: "default-router 10.10.110.1"
+            network_id: "network 10.10.110.0 255.255.255.0"
+            parent: "ip dhcp pool OP"
+      cisco.ios.ios_config:
+        before: "{{ item.value.excluded_address }}"
+        lines:
+          - "{{ item.value.network_id }}"
+          - "{{ item.value.default_router_ip}}"
+          - dns-server 8.8.8.8
+        parents: "{{ item.value.parent }}"
+      loop: "{{ pools | dict2items }}"
+      register: confs
+
+    - name: Debug test
+      debug:
+        var: confs
+

@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 1840 bytes
+Current configuration : 1762 bytes
 !
-! Last configuration change at 13:11:30 UTC Fri Jun 14 2024 by malaa
+! Last configuration change at 22:44:42 UTC Fri Jun 14 2024 by malaa
 upgrade fpd auto
 version 15.2
 service timestamps debug datetime msec
@@ -22,6 +22,7 @@ no ip icmp rate-limit unreachable
 !
 !
 ip dhcp excluded-address 10.10.90.1
+ip dhcp excluded-address 10.10.100.1
 !
 ip dhcp pool IT
  network 10.10.90.0 255.255.255.0
@@ -31,6 +32,11 @@ ip dhcp pool IT
 ip dhcp pool Servers
  network 10.10.100.0 255.255.255.0
  default-router 10.10.100.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool OP
+ network 10.10.110.0 255.255.255.0
+ default-router 10.10.110.1 
  dns-server 8.8.8.8 
 !
 !
@@ -50,16 +56,13 @@ multilink bundle-name authenticated
 !
 !
 !
-username malaa privilege 15 secret 5 $1$g28b$f2t0VQ/tRBG3fTrPLJWLo.
+username malaa privilege 15 secret 5 $1$FqA6$Qg1szidXQ3IQuzVKT1V9Y/
 !
 redundancy
 !
 !
 ip tcp synwait-time 5
 ip ssh version 2
-ip ssh pubkey-chain
-  username malaa
-   key-hash ssh-rsa 5F4836CCD2DA0683CA80BA518E573678 malaa@localhost.localdomain
 ! 
 !
 !
@@ -85,25 +88,15 @@ interface FastEthernet0/1
  duplex auto
  speed auto
 !
-interface Ethernet1/0
+interface GigabitEthernet1/0
  no ip address
  shutdown
- duplex half
+ negotiation auto
 !
-interface Ethernet1/1
+interface GigabitEthernet2/0
  no ip address
  shutdown
- duplex half
-!
-interface Ethernet1/2
- no ip address
- shutdown
- duplex half
-!
-interface Ethernet1/3
- no ip address
- shutdown
- duplex half
+ negotiation auto
 !
 ip forward-protocol nd
 no ip http server
