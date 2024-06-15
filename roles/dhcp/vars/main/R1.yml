@@ -1,0 +1,11 @@
+pools:
+  Servers:
+    excluded_address: "ip dhcp excluded-address 10.10.100.1"
+    default_router_ip: "default-router 10.10.100.1"
+    network_id: "network 10.10.100.0 255.255.255.0"
+    parent: "ip dhcp pool Servers"
+  OP:
+    excluded_address: "ip dhcp excluded-address 10.10.110.1"
+    default_router_ip: "default-router 10.10.110.1"
+    network_id: "network 10.10.110.0 255.255.255.0"
+    parent: "ip dhcp pool OP"

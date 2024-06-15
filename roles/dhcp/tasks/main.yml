@@ -1,0 +1,10 @@
+- name: Configure DHCP pools
+  cisco.ios.ios_config:
+    before: "{{ item.value.excluded_address }}"
+    lines:
+      - "{{ item.value.network_id }}"
+      - "{{ item.value.default_router_ip}}"
+      - dns-server 8.8.8.8
+    parents: "{{ item.value.parent }}"
+  loop: "{{ pools | dict2items }}"
+  register: confs

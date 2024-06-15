@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 1762 bytes
+Current configuration : 1799 bytes
 !
-! Last configuration change at 22:44:42 UTC Fri Jun 14 2024 by malaa
+! Last configuration change at 19:28:58 UTC Sat Jun 15 2024 by malaa
 upgrade fpd auto
 version 15.2
 service timestamps debug datetime msec
@@ -23,6 +23,7 @@ no ip icmp rate-limit unreachable
 !
 ip dhcp excluded-address 10.10.90.1
 ip dhcp excluded-address 10.10.100.1
+ip dhcp excluded-address 10.10.110.1
 !
 ip dhcp pool IT
  network 10.10.90.0 255.255.255.0
