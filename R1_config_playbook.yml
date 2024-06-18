@@ -7,14 +7,15 @@
     - name: Backup configuration
       cisco.ios.ios_config:
         backup: true
-        backup_options:
-          filename: R1_config_before
 
     - name: Configure DHCP pools
-      cisco.ios.ios_config:
-        before: ip dhcp excluded-address 10.10.100.1
-        lines:
-          - network 10.10.100.0 255.255.255.0
-          - default-router 10.10.100.1
-          - dns-server 8.8.8.8
-        parents: ip dhcp pool Servers
+      import_role:
+        name: dhcp
+
+    - name: Configure L3_Interfaces
+      import_role:
+        name: l3_interfaces
+
+    - name: Debug test
+      debug:
+        var: l3_interfaces_conf

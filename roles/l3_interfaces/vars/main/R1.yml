@@ -1,0 +1,13 @@
+subinterfaces:
+  Servers_VLAN10_SUBIF:
+    encapsulation: "encapsulation dot1Q 10"
+    ip_address: "ip address 10.10.100.1 255.255.255.0"
+    parent: "interface FastEthernet0/0.10"
+  IT_VLAN20_SUBIF:
+    encapsulation: "encapsulation dot1Q 20"
+    ip_address: "ip address 10.10.90.1 255.255.255.0"
+    parent: "interface FastEthernet0/0.20"
+  OP_VLAN30_SUBIF:
+    encapsulation: "encapsulation dot1Q 30"
+    ip_address: "ip address 10.10.110.1 255.255.255.0"
+    parent: "interface FastEthernet0/0.30"

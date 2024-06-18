@@ -7,4 +7,4 @@
       - dns-server 8.8.8.8
     parents: "{{ item.value.parent }}"
   loop: "{{ pools | dict2items }}"
-  register: confs
+  register: dhcp_conf
