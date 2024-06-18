@@ -1,0 +1,14 @@
+---
+
+- hosts: cisco_routers
+  gather_facts: false
+  tasks:
+
+    - name: Restore initial configuration
+      cisco.ios.ios_config:
+        src: backup/initial_confs/R1_IC.cfg
+      register: test
+
+    - name: Debug
+      debug:
+        var: test

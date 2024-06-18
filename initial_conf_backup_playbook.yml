@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Backing up initial configurations
+      cisco.ios.ios_config:
+        backup: true
+        backup_options:
+          filename: "{{inventory_hostname}}_IC.cfg"
+          dir_path: backup/initial_confs
