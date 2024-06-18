@@ -1,7 +1,8 @@
 Building configuration...
 
-Current configuration : 1445 bytes
+Current configuration : 1985 bytes
 !
+! Last configuration change at 16:58:56 UTC Tue Jun 18 2024 by malaa
 upgrade fpd auto
 version 15.2
 service timestamps debug datetime msec
@@ -21,10 +22,22 @@ no ip icmp rate-limit unreachable
 !
 !
 ip dhcp excluded-address 10.10.90.1
+ip dhcp excluded-address 10.10.100.1
+ip dhcp excluded-address 10.10.110.1
 !
 ip dhcp pool IT
  network 10.10.90.0 255.255.255.0
  default-router 10.10.90.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool Servers
+ network 10.10.100.0 255.255.255.0
+ default-router 10.10.100.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool OP
+ network 10.10.110.0 255.255.255.0
+ default-router 10.10.110.1 
  dns-server 8.8.8.8 
 !
 !
@@ -66,9 +79,17 @@ interface FastEthernet0/0
  duplex auto
  speed auto
 !
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.10.100.1 255.255.255.0
+!
 interface FastEthernet0/0.20
  encapsulation dot1Q 20
  ip address 10.10.90.1 255.255.255.0
+!
+interface FastEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.10.110.1 255.255.255.0
 !
 interface FastEthernet0/1
  no ip address

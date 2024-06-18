@@ -1,0 +1,30 @@
+---
+
+- hosts: cisco_routers
+  gather_facts: false
+  tasks:
+
+    - name: Backup configuration
+      tags: backup
+      cisco.ios.ios_config:
+        backup: true
+
+    - name: Configure DHCP pools
+      tags: dhcp, d_dhcp
+      import_role:
+        name: dhcp
+
+    - name: Configure L3_Interfaces
+      tags: l3_interfaces, d_l3_interfaces
+      import_role:
+        name: l3_interfaces
+
+    - name: Debug DHCP pools
+      tags: d_dhcp
+      debug:
+        var: dhcp_conf
+
+    - name: Debug L3_Interfaces
+      tags: l3_interfaces
+      debug:
+        var: l3_interfaces_conf
