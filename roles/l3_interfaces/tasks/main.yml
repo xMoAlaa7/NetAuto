@@ -1,13 +1,14 @@
 - name: Enable L3_Interfaces
   cisco.ios.ios_config:
-    lines: no shutdown
+    lines:
+      - no shutdown
     parents: interface FastEthernet0/0
 
 - name: Configure L3_Interfaces
   cisco.ios.ios_config:
     lines:
-      - "{{ item.value.encapsulation}}"
-      - "{{ item.value.ip_address}}"
-    parents: "{{ item.value.parent}}"
+      - "encapsulation dot1Q {{ item.value.encapsulation}}"
+      - "ip address {{ item.value.ip_address}}"
+    parents: "interface {{ item.key}}"
   loop: "{{ subinterfaces | dict2items }}"
   register: l3_interfaces_conf
