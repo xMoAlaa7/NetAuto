@@ -1,0 +1,23 @@
+---
+
+- hosts: cisco_switches
+  gather_facts: false
+  tasks:
+
+    - name: Configure VLANs
+      import_role:
+        name: vlans
+
+    - name: Configure L2_Interfaces
+      import_role:
+        name: l2_interfaces
+
+  post_tasks:
+
+    - name: Debug trunk
+      debug:
+        var: trunk
+
+    - name: Debug access
+      debug:
+        var: access

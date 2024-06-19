@@ -1,0 +1,11 @@
+- name: Configure Trunk L2_Interfaces
+  debug:
+    msg: "Trigger trunk conf"
+  changed_when: True
+  notify: trunk
+    
+- name: Configure Access L2_Interfaces
+  debug:
+    msg: "Trigger access conf"
+  changed_when: True
+  notify: access

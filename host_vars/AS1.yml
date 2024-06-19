@@ -1,2 +1,4 @@
-vlan_id_number: 20
-vlan_id_name: "IT"
+vlans:
+  VLAN20_IT:
+    name: IT
+    vlan_id: 20

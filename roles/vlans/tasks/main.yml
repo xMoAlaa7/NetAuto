@@ -1,0 +1,8 @@
+- name: Configure VLANs
+  cisco.ios.ios_vlans:
+    config:
+      - name: "{{ item.value.name }}"
+        vlan_id: "{{ item.value.vlan_id }}"
+    state: merged
+  loop: "{{ vlans | dict2items }}"
+  register: vlans_conf

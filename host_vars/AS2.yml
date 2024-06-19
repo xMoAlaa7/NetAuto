@@ -1,3 +1,17 @@
-vlan_id_number: 10
-vlan_id_name: "Servers"
+vlans:
+  VLAN10_Servers:
+    name: Servers
+    vlan_id: 10
+  VLAN20_IT:
+    name: IT
+    vlan_id: 20
 
+trunk_interfaces:
+  Ethernet0/0:
+    allowed_vlans: 10,20
+
+access_interfaces:
+  range Ethernet0/1-3:
+    vlan: 10
+  range Ethernet1/0-3:
+    vlan: 10

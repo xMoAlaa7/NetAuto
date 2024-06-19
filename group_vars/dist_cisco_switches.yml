@@ -1,7 +1,10 @@
 vlans:
+  VLAN10_Servers:
+    name: Servers
+    vlan_id: 10
   VLAN20_IT:
     name: IT
     vlan_id: 20
-  VLAN30_OP:
+  VLAN30_IT:
     name: OP
     vlan_id: 30
