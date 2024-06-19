@@ -5,3 +5,14 @@ vlans:
   VLAN30_OP:
     name: OP
     vlan_id: 30
+
+l2_interfaces:
+  Ethernet0/0:
+    mode: trunk
+    allowed_vlans: 30,20
+  range Ethernet0/1-3:
+    mode: access
+    vlan: 30
+  range Ethernet1/0-3:
+    mode: access
+    vlan: 30

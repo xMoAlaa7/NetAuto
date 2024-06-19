@@ -12,12 +12,10 @@
       import_role:
         name: l2_interfaces
 
-  post_tasks:
+#    - name: Debug trunk
+#      debug:
+#        var: trunk
 
-    - name: Debug trunk
-      debug:
-        var: trunk
-
-    - name: Debug access
-      debug:
-        var: access
+#    - name: Debug access
+#     debug:
+#       var: access

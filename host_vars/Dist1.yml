@@ -1,0 +1,13 @@
+l2_interfaces:
+  Ethernet0/0:
+    mode: trunk
+    allowed_vlans: 1-300
+  Ethernet0/1:
+    mode: access
+    vlan: 20
+  Ethernet0/2:
+    mode: trunk
+    allowed_vlans: 10,20
+  Ethernet0/3:
+    mode: trunk
+    allowed_vlans: 30,20

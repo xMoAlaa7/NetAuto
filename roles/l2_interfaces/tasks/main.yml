@@ -1,11 +1,24 @@
 - name: Configure Trunk L2_Interfaces
-  debug:
-    msg: "Trigger trunk conf"
-  changed_when: True
-  notify: trunk
-    
+  cisco.ios.ios_l2_interfaces:
+    config:
+      - name: "{{ item.key }}"
+        mode: trunk
+        trunk:
+          allowed_vlans: "{{ item.value.allowed_vlans }}"
+          encapsulation: dot1q
+    state: merged
+  loop: "{{ l2_interfaces | dict2items }}"
+  when: item.value.mode == "trunk"
+  register: trunk
+
 - name: Configure Access L2_Interfaces
-  debug:
-    msg: "Trigger access conf"
-  changed_when: True
-  notify: access
+  cisco.ios.ios_l2_interfaces:
+    config:
+      - name: "{{ item.key }}"
+        mode: access
+        access:
+          vlan: "{{ item.value.vlan }}"
+    state: merged
+  loop: "{{ l2_interfaces | dict2items }}"
+  when: item.value.mode == "access"
+  register: access

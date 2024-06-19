@@ -2,3 +2,11 @@ vlans:
   VLAN20_IT:
     name: IT
     vlan_id: 20
+
+l2_interfaces:
+  range Ethernet0/0-3:
+    mode: access
+    vlan: 20
+  range Ethernet1/0-3:
+    mode: access
+    vlan: 20

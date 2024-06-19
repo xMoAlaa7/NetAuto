@@ -6,12 +6,13 @@ vlans:
     name: IT
     vlan_id: 20
 
-trunk_interfaces:
+l2_interfaces:
   Ethernet0/0:
+    mode: trunk
     allowed_vlans: 10,20
-
-access_interfaces:
   range Ethernet0/1-3:
+    mode: access
     vlan: 10
   range Ethernet1/0-3:
+    mode: access
     vlan: 10
