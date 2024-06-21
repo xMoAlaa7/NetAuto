@@ -1,0 +1,29 @@
+---
+
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Configure SSH keys
+      no_log: true
+      cisco.ios.ios_user:
+        aggregate:
+          - name: test
+            hashed_password:
+              type: 9
+              value: "$9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6"
+            privilege: 15
+            sshkey: "{{ lookup('file','~/.ssh/test.pub') }}"
+            state: present #Set to absent to remove key only
+          - name: malaa
+            hashed_password:
+              type: 9
+              value: "$9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm."
+            privilege: 15
+            sshkey: "{{ lookup('file','~/.ssh/malaa.pub') }}"
+            state: present #Set to absent to remove key only
+      register: users_conf
+
+    - name: Debug users
+      debug:
+        var: users_conf

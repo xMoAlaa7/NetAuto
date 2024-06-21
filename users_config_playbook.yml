@@ -1,0 +1,32 @@
+---
+
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Create new users
+      cisco.ios.ios_config:
+        lines:
+          - username malaa priv 15 secret 9 $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
+          - username test priv 15 secret 9 $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
+      register: users_conf
+
+    - name: Configure SSH keys
+      no_log: true
+      cisco.ios.ios_user:
+        aggregate:
+          - name: test
+            sshkey: "{{ lookup('file','~/.ssh/test.pub') }}"
+            state: present #Set to absent to remove key
+          - name: malaa
+            sshkey: "{{ lookup('file','~/.ssh/malaa.pub') }}"
+            state: present #Set to absent to remove key
+      register: ssh_conf
+
+    - name: Debug users
+      debug:
+        var: users_conf
+
+    - name: Debug ssh keys
+      debug:
+        var: ssh_conf

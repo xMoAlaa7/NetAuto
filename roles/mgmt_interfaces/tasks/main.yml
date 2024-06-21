@@ -1,0 +1,8 @@
+- name: Configure Management Interfaces
+  cisco.ios.ios_l3_interfaces:
+    config:
+      - name: vlan 20
+        ipv4:
+          - address: "{{ mgmt_ip_address }}"
+    state: merged
+  register: mgmt_interfaces_conf

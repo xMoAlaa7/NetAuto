@@ -16,3 +16,5 @@ l2_interfaces:
   range Ethernet1/0-3:
     mode: access
     vlan: 10
+
+mgmt_ip_address: "10.10.90.204 255.255.255.0"

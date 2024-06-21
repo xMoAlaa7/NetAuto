@@ -11,3 +11,5 @@ l2_interfaces:
   Ethernet0/3:
     mode: trunk
     allowed_vlans: 30,20
+
+mgmt_ip_address: "10.10.90.202 255.255.255.0"

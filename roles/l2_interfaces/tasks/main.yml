@@ -9,7 +9,7 @@
     state: merged
   loop: "{{ l2_interfaces | dict2items }}"
   when: item.value.mode == "trunk"
-  register: trunk
+  register: trunk_conf
 
 - name: Configure Access L2_Interfaces
   cisco.ios.ios_l2_interfaces:
@@ -21,4 +21,4 @@
     state: merged
   loop: "{{ l2_interfaces | dict2items }}"
   when: item.value.mode == "access"
-  register: access
+  register: access_conf

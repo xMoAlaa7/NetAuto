@@ -12,10 +12,18 @@
       import_role:
         name: l2_interfaces
 
+    - name: Configure Management Interfaces
+      import_role:
+        name: mgmt_interfaces
+
+    - name: Debug mgmt
+      debug:
+        var: mgmt_interfaces_conf
+
 #    - name: Debug trunk
 #      debug:
-#        var: trunk
+#        var: trunk_conf
 
 #    - name: Debug access
-#     debug:
-#       var: access
+#      debug:
+#       var: access_conf

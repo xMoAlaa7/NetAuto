@@ -8,7 +8,7 @@
           encapsulation: dot1q
     state: merged
   loop: "{{ trunk_interfaces | dict2items }}"
-  register: trunk
+  register: trunk_conf
 
 - name: access
   cisco.ios.ios_l2_interfaces:
@@ -19,4 +19,4 @@
           vlan: "{{ item.value.vlan }}"
     state: merged
   loop: "{{ access_interfaces | dict2items }}"
-  register: access
+  register: access_conf
