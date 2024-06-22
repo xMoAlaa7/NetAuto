@@ -1,0 +1,154 @@
+Building configuration...
+
+Current configuration : 2410 bytes
+!
+! Last configuration change at 19:44:04 UTC Sat Jun 22 2024 by malaa
+upgrade fpd auto
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+ip dhcp excluded-address 10.10.90.1
+ip dhcp excluded-address 10.10.100.1
+ip dhcp excluded-address 10.10.110.1
+!
+ip dhcp pool IT
+ network 10.10.90.0 255.255.255.0
+ default-router 10.10.90.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool Servers
+ network 10.10.100.0 255.255.255.0
+ default-router 10.10.100.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool OP
+ network 10.10.110.0 255.255.255.0
+ default-router 10.10.110.1 
+ dns-server 8.8.8.8 
+!
+!
+!
+no ip domain lookup
+ip domain name ansible.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username malaa privilege 15 secret 9 $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
+username test privilege 15 secret 9 $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+ip ssh pubkey-chain
+  username test
+   key-hash ssh-rsa 93DFBCF7AF2AAC9072189EE4537FD752 malaa@localhost.localdomain
+   key-hash ssh-rsa 5F4836CCD2DA0683CA80BA518E573678 malaa@localhost.localdomain
+  username malaa
+   key-hash ssh-rsa 5F4836CCD2DA0683CA80BA518E573678 malaa@localhost.localdomain
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.10.100.1 255.255.255.0
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.10.90.1 255.255.255.0
+!
+interface FastEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.10.110.1 255.255.255.0
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet1/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+control-plane
+!
+!
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end

@@ -1,4 +1,8 @@
+#If you're going to prepend any lines with no, uncomment vars and prepend_info
+
 - name: Configure DHCP pools
+  #vars:
+    #prepend_info: Some
   cisco.ios.ios_config:
     before: "ip dhcp excluded-address {{ item.value.excluded_address }}"
     lines:

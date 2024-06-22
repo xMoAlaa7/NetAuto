@@ -1,0 +1,52 @@
+---
+
+- hosts: cisco_switches
+  gather_facts: false
+  pre_tasks:
+    - name: Confirmation #Skip this by using --skip-tags always or setting -e skip_confirmation=true
+      tags: always
+      vars:
+        playbook_name: tagsSW_config_playbook.yml
+        skip_confirmation: false
+      include_role:
+        name: confirmation
+      when: skip_confirmation == false
+
+  tasks:
+
+    - name: Configure VLANs
+      tags: vlans, d_vlans
+      import_role:
+        name: vlans #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+
+    - name: Configure L2_Interfaces
+      tags: l2_interfaces, d_l2_interfaces, tr_d_l2_interfaces, acc_d_l2_interfaces
+      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+        name: l2_interfaces
+
+    - name: Configure Management Interfaces
+      tags: mgmt_interfaces, d_mgmt_interfaces
+      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+        name: mgmt_interfaces
+
+    - name: Debug vlans
+      tags: debug, d_vlans
+      debug:
+        var: vlans_conf
+
+    - name: Debug trunk
+      tags: debug, d_l2_interfaces, tr_d_l2_interfaces
+      debug:
+        var: trunk_conf
+
+    - name: Debug access
+      tags: debug, d_l2_interfaces, acc_d_l2_interfaces
+      debug:
+       var: access_conf
+
+    - name: Debug mgmt
+      tags: debug, d_mgmt_interfaces
+      debug:
+        msg:
+          - "{{ mgmt_interfaces_conf }}"
+          - "Interface vlan 20 has been set to administratively up"

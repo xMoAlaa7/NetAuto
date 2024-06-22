@@ -3,6 +3,12 @@
     config:
       - name: vlan 20
         ipv4:
-          - address: "{{ mgmt_ip_address }}"
-    state: merged
+          - address: "{{ mgmt_ip_address}}"
+    state: "{{ state_typeA }}"
   register: mgmt_interfaces_conf
+
+- name: Enable Management Interfaces
+  cisco.ios.ios_config:
+    lines:
+      - no shutdown
+    parents: interface vlan 20

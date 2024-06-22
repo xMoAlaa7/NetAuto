@@ -2,6 +2,16 @@
 
 - hosts: cisco_routers
   gather_facts: false
+  pre_tasks:
+    - name: Confirmation #Skip this by using --skip-tags always or setting -e skip_confirmation=true
+      tags: always
+      vars: 
+        playbook_name: tagsR1_config_playbook.yml
+        skip_confirmation: false
+      include_role:
+        name: confirmation
+      when: skip_confirmation == false
+
   tasks:
 
     - name: Backup configuration
@@ -20,11 +30,13 @@
         name: l3_interfaces
 
     - name: Debug DHCP pools
-      tags: d_dhcp
+      tags: debug, d_dhcp
       debug:
         var: dhcp_conf
 
     - name: Debug L3_Interfaces
-      tags: l3_interfaces
+      tags: debug, d_l3_interfaces
       debug:
-        var: l3_interfaces_conf
+        msg:
+          - "{{ l3_interfaces_conf }}"
+          - "Interface FastEthernet0/0 has been set to administratively up"
