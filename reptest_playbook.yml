@@ -1,0 +1,13 @@
+---
+
+- hosts: cisco_routers
+  gather_facts: false
+  tasks:
+    - name: Test conf
+      cisco.ios.ios_config:
+        diff_against: intended
+        intended_config: "{{ lookup('file', '~/NetAuto/backup/initial_confs/R1_IC.cfg') }}"
+      register: test
+
+
+# Add comparison with of current configuration with configuration specified by a variable set by the user during execution.
