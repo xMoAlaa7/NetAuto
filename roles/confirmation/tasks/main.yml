@@ -86,4 +86,3 @@
   tags: always
   pause:
     prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."
-

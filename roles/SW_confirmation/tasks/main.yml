@@ -1,0 +1,43 @@
+- name: Displaying VLANs Configuration Information
+  tags: vlans, d_vlans
+  debug:
+    msg:
+      - "State is set to {{ state_typeA }}"
+      - "vlan {{ item.value.vlan_id }}"
+      - "name {{ item.value.name }}"
+  loop: "{{ vlans | dict2items }}"
+
+- name: Displaying L2_Trunk_Interfaces Configuration Information
+  tags: l2_interfaces, d_l2_interfaces, tr_d_l2_interfaces
+  debug:
+    msg:
+      - "State is set to {{ state_typeA }}"
+      - "interface {{ item.key }}"
+      - "switchport trunk encapsulation dot1q"
+      - "switchport mode trunk"
+      - "switchport trunk allowed vlan {{ item.value.allowed_vlans }}"
+  loop: "{{ l2_interfaces | dict2items }}"
+  when: item.value.mode == "trunk"
+
+- name: Displaying L2_Access_Interfaces Configuration Information
+  tags: l2_interfaces, d_l2_interfaces, acc_d_l2_interfaces
+  debug:
+    msg:
+      - "State is set to {{ state_typeA }}"
+      - "interface {{ item.key }}"
+      - "switchport mode access"
+      - "switchport access vlan {{ item.value.vlan }}"
+  loop: "{{ l2_interfaces | dict2items }}"
+  when: item.value.mode == "access"
+
+- name: Displaying Management Interfaces Configuration Information
+  tags: mgmt_interfaces, d_mgmt_interfaces
+  debug:
+    msg:
+      - "State is set to {{ state_typeA }}"
+      - "interface vlan 20"
+
+- name: Confirmation
+  tags: always
+  pause:
+    prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."

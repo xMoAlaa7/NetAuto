@@ -1,0 +1,7 @@
+- name: Confirmation #Skip this by using --skip-tags always or setting -e skip_confirmation=true
+  tags: always
+  vars:
+    skip_confirmation: false
+  include_role:
+    name: "{{ role_name }}"
+  when: skip_confirmation == false

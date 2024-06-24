@@ -1,0 +1,10 @@
+- name: Backup for Comparison (Before) #Skip this by using --skip-tags always or setting -e skip_compare=true
+  tags: always
+  vars:
+    skip_compare: false
+  cisco.ios.ios_config:
+    backup: true
+    backup_options:
+      filename: "{{ inventory_hostname }}_cmp_before.cfg"
+      dir_path: backup/compare_confs
+  when: skip_compare == false

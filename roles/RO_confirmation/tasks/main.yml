@@ -1,0 +1,28 @@
+- name: Displaying DHCP Configuration Information
+  tags: dhcp, d_dhcp
+  debug:
+    msg:
+      - "{{ prepend_info }} of the commands here are prepended with no. The values without any prepend are as shown."
+      - "ip dhcp pool {{ item.key }}"
+      - "ip dhcp excluded-address {{ item.value.excluded_address }}"
+      - "network {{ item.value.network_id }}"
+      - "default-router {{ item.value.default_router_ip }}"
+      - "dns-server 8.8.8.8"
+  loop: "{{ pools | dict2items }}"
+
+- name: Displaying L3_Interfaces Configuration Information
+  tags: l3_interfaces, d_l3_interfaces
+  debug:
+    msg:
+      - "{{ prepend_info }} of the commands here are prepended with no. The values without any prepend are as shown."
+      - "interface FastEthernet0/0"
+      - "no shutdown"
+      - "interface {{ item.key }}"
+      - "encapsulation dot1Q {{ item.value.encapsulation}}"
+      - "ip address {{ item.value.ip_address}}"
+  loop: "{{ subinterfaces | dict2items }}"
+
+- name: Confirmation
+  tags: always
+  pause:
+    prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."

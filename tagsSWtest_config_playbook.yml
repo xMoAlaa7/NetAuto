@@ -1,0 +1,70 @@
+---
+
+- hosts: cisco_switches
+  gather_facts: false
+  pre_tasks:
+    - name: Run the Confirmation Task #Skip this by using --skip-tags always or setting -e skip_confirmation=true
+      vars: #This var determines which role will be included by the task.
+        role_name: SW_confirmation
+      import_tasks:
+        file: tasks/confirmation_task.yml
+
+    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags always or setting -e skip_compare=true
+      import_tasks:
+        file: tasks/compare_before_task.yml
+
+    - name: Backup configuration
+      tags: always
+      cisco.ios.ios_config:
+        backup: true
+
+  tasks:
+    - name: Configure VLANs
+      tags: vlans, d_vlans
+      import_role:
+        name: vlans #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+
+    - name: Configure L2_Interfaces
+      tags: l2_interfaces, d_l2_interfaces, tr_d_l2_interfaces, acc_d_l2_interfaces
+      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+        name: l2_interfaces
+
+    - name: Configure Management Interfaces
+      tags: mgmt_interfaces, d_mgmt_interfaces
+      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+        name: mgmt_interfaces
+
+  post_tasks:
+    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags always or setting -e skip_compare=true
+      import_tasks:
+        file: tasks/compare_after_task.yml
+
+    - name: Debug
+      tags: never, debug
+      block:
+        - name: Debug vlans
+          tags: d_vlans
+          debug:
+            var: vlans_conf
+
+        - name: Debug trunk
+          tags: d_l2_interfaces, tr_d_l2_interfaces
+          debug:
+            var: trunk_conf
+
+        - name: Debug access
+          tags: d_l2_interfaces, acc_d_l2_interfaces
+          debug:
+            var: access_conf
+
+        - name: Debug mgmt
+          tags: d_mgmt_interfaces
+          debug:
+            msg:
+              - "{{ mgmt_interfaces_conf }}"
+              - "Interface vlan 20 has been set to administratively up"
+
+    - name: Save
+      tags: never, save
+      import_tasks:
+        file: tasks/save_task.yml

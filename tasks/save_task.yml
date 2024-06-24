@@ -1,0 +1,12 @@
+- name: Block for Saving Configurations
+  become: yes
+  become_method: enable
+  block:
+    - name: Prompt to Save Configurations
+      pause:
+        prompt: "You're about to save configurations. To abort click CTRL+C then A, to continue, click Enter."
+    
+    - name: Save Configurations
+      cisco.ios.ios_config:
+        save_when: always
+

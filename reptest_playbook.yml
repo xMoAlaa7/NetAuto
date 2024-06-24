@@ -1,13 +1,18 @@
 ---
 
-- hosts: cisco_routers
+- hosts: all
   gather_facts: false
   tasks:
-    - name: Test conf
+#Intended-Config should be supplied by the user after confirming it works in the development environment.
+    - name: Test current Running-Config with supplied Intended-Config
+      tags: intended
       cisco.ios.ios_config:
         diff_against: intended
-        intended_config: "{{ lookup('file', '~/NetAuto/backup/initial_confs/R1_IC.cfg') }}"
-      register: test
+        intended_config: "{{ lookup('file', '~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg') }}"
 
-
-# Add comparison with of current configuration with configuration specified by a variable set by the user during execution.
+#config_path should be specified by the user during playbook run.
+    - name: Test current Running-Config with Config specified by user (Intended-Config).
+      tags: specify
+        cisco.ios.ios_config:
+          diff_against: intended
+          intended_config: "{{ lookup('file', '{{ config_path }}') }}"

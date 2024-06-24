@@ -1,0 +1,16 @@
+- name: Displaying Users Configuration Information
+  tags: users, d_users
+  debug:
+    msg:
+      - "{{ item.value.disabled }} {{ item.key }} priv {{ item.value.privilege }} secret {{ item.value.secret }} {{ item.value.hashed_password }}"
+      - "State is set to {{ item.value.state }} for the next lines."
+      - "ip ssh pubkey-chain"
+      - "username {{ item.key }}"
+      - "key-string"
+      - "Public key inserted here"
+  loop: "{{ users | dict2items }}"
+
+- name: Confirmation
+  tags: always
+  pause:
+    prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."

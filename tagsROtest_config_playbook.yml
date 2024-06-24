@@ -1,0 +1,55 @@
+---
+
+- hosts: cisco_routers
+  gather_facts: false
+  pre_tasks:
+    - name: Run the Confirmation Task #Skip this by using --skip-tags always or setting -e skip_confirmation=true
+      vars: #This var determines which role will be included by the task.
+        role_name: RO_confirmation
+      import_tasks:
+        file: tasks/confirmation_task.yml
+
+    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags always or setting -e skip_compare=true
+      import_tasks:
+        file: tasks/compare_before_task.yml
+
+    - name: Backup configuration
+      tags: always
+      cisco.ios.ios_config:
+        backup: true
+
+  tasks:
+    - name: Configure DHCP pools
+      tags: dhcp, d_dhcp
+      import_role:
+        name: dhcp
+
+    - name: Configure L3_Interfaces
+      tags: l3_interfaces, d_l3_interfaces
+      import_role:
+        name: l3_interfaces
+
+  post_tasks:
+    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags always or setting -e skip_compare=true
+      import_tasks:
+        file: tasks/compare_after_task.yml
+
+    - name: Debug
+      tags: never, debug
+      block:
+        - name: Debug DHCP pools
+          tags: debug, d_dhcp
+          debug:
+            var: dhcp_conf
+
+        - name: Debug L3_Interfaces
+          tags: debug, d_l3_interfaces
+          debug:
+            msg:
+              - "{{ l3_interfaces_conf }}"
+              - "Interface FastEthernet0/0 has been set to administratively up"
+
+    - name: Save
+      tags: never, save
+      import_tasks:
+        file: tasks/save_task.yml
