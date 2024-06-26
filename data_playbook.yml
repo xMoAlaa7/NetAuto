@@ -13,6 +13,6 @@
 #config_path should be specified by the user during playbook run.
     - name: Test current Running-Config with Config specified by user (Intended-Config).
       tags: specify
-        cisco.ios.ios_config:
-          diff_against: intended
-          intended_config: "{{ lookup('file', '{{ config_path }}') }}"
+      cisco.ios.ios_config:
+        diff_against: intended
+        intended_config: "{{ lookup('file', '{{ config_path }}') }}"
