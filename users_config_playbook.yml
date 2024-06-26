@@ -12,14 +12,14 @@
       import_tasks:
         file: tasks/confirmation_task.yml
 
-    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags always or setting -e skip_compare=true
-      import_tasks:
-        file: tasks/compare_before_task.yml
-
     - name: Backup configuration
       tags: always
       cisco.ios.ios_config:
         backup: true
+
+    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags always or setting -e skip_compare=true
+      import_tasks:
+        file: tasks/compare_before_task.yml
 
   tasks:
     - name: Configure users
@@ -59,7 +59,7 @@
           debug:
             var: ssh_conf
 
-    - name: Save
+    - name: Run the Save Configurations Task
       tags: never, save
       import_tasks:
         file: tasks/save_task.yml
