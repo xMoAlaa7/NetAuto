@@ -65,6 +65,5 @@
               - "Interface vlan 20 has been set to administratively up"
 
     - name: Run the Save Configurations Task
-      tags: never, save
       import_tasks:
         file: tasks/save_task.yml

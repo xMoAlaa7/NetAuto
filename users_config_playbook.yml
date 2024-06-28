@@ -60,6 +60,5 @@
             var: ssh_conf
 
     - name: Run the Save Configurations Task
-      tags: never, save
       import_tasks:
         file: tasks/save_task.yml

@@ -1,6 +1,5 @@
 - name: Block for Saving Configurations
-  become: yes
-  become_method: enable
+  tags: never, save
   block:
     - name: Prompt to Save Configurations
       pause:
