@@ -20,7 +20,7 @@
       - "interface {{ item.key }}"
       - "encapsulation dot1Q {{ item.value.encapsulation}}"
       - "ip address {{ item.value.ip_address}}"
-  loop: "{{ subinterfaces | dict2items }}"
+  loop: "{{ interfaces | dict2items }}"
 
 - name: Confirmation
   tags: always
