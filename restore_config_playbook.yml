@@ -14,11 +14,12 @@
       tags: intended
       cisco.ios.ios_command:
         commands: 'configure replace scp://{{ ans_us }}:{{ ans_pass }}@10.10.90.16/~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg force'
+    
     - name: Restoring Configurations to Specified
       tags: specify
       cisco.ios.ios_command:
         commands: 'configure replace scp://{{ ans_us }}:{{ ans_pass }}@10.10.90.16/{{ config_path }} force'
 
     - name: Run the Save Configurations Task
-      import_tasks:
-        file: tasks/save_task.yml
+      import_role:
+        name: save

@@ -7,4 +7,3 @@
     config:
       lines: "file prompt quiet" #Removes confirmation upon save in network devices.
     save_when: always
-
