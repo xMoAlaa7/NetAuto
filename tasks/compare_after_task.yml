@@ -1,8 +1,4 @@
-- name: Compare with Previous Configuration #Skip this by using --skip-tags always or setting -e skip_compare=true
-  tags: always
-  vars:
-    skip_compare: false
-  when: skip_compare == false
+- name: Compare with Previous Configuration
   block:
     - name: Backup for Comparison (After)
       cisco.ios.ios_config:

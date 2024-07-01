@@ -3,19 +3,19 @@
 - hosts: cisco_switches
   gather_facts: false
   pre_tasks:
-    - name: Run the Confirmation Task #Skip this by using --skip-tags always or setting -e skip_confirmation=true
-      vars: #This var determines which role will be included by the task.
-        role_name: SW_confirmation
-      import_tasks:
-        file: tasks/confirmation_task.yml
+    - name: Run the Confirmation Task #Skip this by using --skip-tags confirmation
+      tags: always, confirmation
+      include_role:
+        name: SW_confirmation
 
-    - name: Backup configuration
+    - name: Backup Configuration
       tags: always
       cisco.ios.ios_config:
         backup: true
 
-    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags always or setting -e skip_compare=true
-      import_tasks:
+    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags compare
+      tags: always, compare
+      include_tasks:
         file: tasks/compare_before_task.yml
 
   tasks:
@@ -35,8 +35,9 @@
         name: mgmt_interfaces
 
   post_tasks:
-    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags always or setting -e skip_compare=true
-      import_tasks:
+    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags compare
+      tags: always, compare
+      include_tasks:
         file: tasks/compare_after_task.yml
 
     - name: Debug
@@ -64,6 +65,7 @@
               - "{{ mgmt_interfaces_conf }}"
               - "Interface vlan 20 has been set to administratively up"
 
-    - name: Run the Save Configurations Task
-      import_tasks:
-        file: tasks/save_task.yml
+    - name: Save Configurations
+      tags: never, save
+      import_role:
+        name: save

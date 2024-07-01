@@ -12,7 +12,7 @@ pools:
     default_router_ip: "10.10.110.1"
     network_id: "10.10.110.0 255.255.255.0"
 
-subinterfaces:
+interfaces:
   FastEthernet0/0.10:
     encapsulation: "10"
     ip_address: "10.10.100.1 255.255.255.0"

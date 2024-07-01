@@ -1,0 +1,10 @@
+- name: Prompt to Save Configurations
+  pause:
+    prompt: "You're about to save configurations. To abort click CTRL+C then A, to continue, click Enter."
+
+- name: Save Configurations
+  cisco.ios.ios_config:
+    config:
+      lines: "file prompt quiet" #Removes confirmation upon save in network devices.
+    save_when: always
+

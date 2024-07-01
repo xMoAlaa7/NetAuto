@@ -13,5 +13,5 @@
       - "encapsulation dot1Q {{ item.value.encapsulation}}"
       - "ip address {{ item.value.ip_address}}"
     parents: "interface {{ item.key }}"
-  loop: "{{ subinterfaces | dict2items }}"
+  loop: "{{ interfaces | dict2items }}"
   register: l3_interfaces_conf
