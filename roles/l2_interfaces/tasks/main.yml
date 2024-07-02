@@ -6,7 +6,7 @@
         trunk:
           allowed_vlans: "{{ item.value.allowed_vlans }}"
           encapsulation: dot1q
-    state: "{{ state_typeA }}"
+    state: "{{ item.value.state_typeA }}"
   loop: "{{ l2_interfaces | dict2items }}"
   when: item.value.mode == "trunk"
   register: trunk_conf
@@ -18,7 +18,7 @@
         mode: access
         access:
           vlan: "{{ item.value.vlan }}"
-    state: "{{ state_typeA }}"
+    state: "{{ item.value.state_typeA }}"
   loop: "{{ l2_interfaces | dict2items }}"
   when: item.value.mode == "access"
   register: access_conf

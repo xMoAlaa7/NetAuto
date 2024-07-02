@@ -1,6 +1,6 @@
 ansible_connection: ansible.netcommon.network_cli
 ansible_network_os: cisco.ios.ios
-state_typeA: merged
+state_typeA_global: merged
 prepend_info: None
 
 users:

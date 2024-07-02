@@ -2,25 +2,32 @@ vlans:
   VLAN10_Servers:
     name: Servers
     vlan_id: 10
+    state_typeA: "{{ state_typeA_global }}"
   VLAN20_IT:
     name: IT
     vlan_id: 20
+    state_typeA: merged
   VLAN30_IT:
     name: OP
     vlan_id: 30
+    state_typeA: "{{ state_typeA_global }}"
 
 l2_interfaces:
   Ethernet0/0:
     mode: trunk
     allowed_vlans: 1-300
+    state_typeA: merged
   Ethernet0/1:
     mode: access
     vlan: 20
+    state_typeA: merged
   Ethernet0/2:
     mode: trunk
     allowed_vlans: 10,20
+    state_typeA: merged
   Ethernet0/3:
     mode: trunk
     allowed_vlans: 30,20
+    state_typeA: merged
 
 mgmt_ip_address: "10.10.90.202 255.255.255.0"

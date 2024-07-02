@@ -10,7 +10,7 @@
       prompt: Insert Ansible Password
 
   tasks:
-    - name: Restoring Configurations to Intended
+    - name: Restoring Configurations to Initial
       tags: initial
       cisco.ios.ios_command:
         commands: 'configure replace scp://{{ ans_us }}:{{ ans_pass }}@10.10.90.16/~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg force'

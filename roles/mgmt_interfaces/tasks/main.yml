@@ -4,7 +4,7 @@
       - name: vlan 20
         ipv4:
           - address: "{{ mgmt_ip_address}}"
-    state: "{{ state_typeA }}"
+    state: merged
   register: mgmt_interfaces_conf
 
 - name: Enable Management Interfaces

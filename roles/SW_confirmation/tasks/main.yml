@@ -2,7 +2,7 @@
   tags: vlans, d_vlans
   debug:
     msg:
-      - "State is set to {{ state_typeA }}"
+      - "State is set to {{ item.value.state_typeA }}"
       - "vlan {{ item.value.vlan_id }}"
       - "name {{ item.value.name }}"
   loop: "{{ vlans | dict2items }}"
@@ -11,7 +11,7 @@
   tags: l2_interfaces, d_l2_interfaces, tr_d_l2_interfaces
   debug:
     msg:
-      - "State is set to {{ state_typeA }}"
+      - "State is set to {{ item.value.state_typeA }}"
       - "interface {{ item.key }}"
       - "switchport trunk encapsulation dot1q"
       - "switchport mode trunk"
@@ -23,7 +23,7 @@
   tags: l2_interfaces, d_l2_interfaces, acc_d_l2_interfaces
   debug:
     msg:
-      - "State is set to {{ state_typeA }}"
+      - "State is set to {{ item.value.state_typeA }}"
       - "interface {{ item.key }}"
       - "switchport mode access"
       - "switchport access vlan {{ item.value.vlan }}"
@@ -34,7 +34,7 @@
   tags: mgmt_interfaces, d_mgmt_interfaces
   debug:
     msg:
-      - "State is set to {{ state_typeA }}"
+      - "State is set to merged"
       - "interface vlan 20"
 
 - name: Confirmation

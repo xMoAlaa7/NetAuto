@@ -22,16 +22,16 @@
     - name: Configure VLANs
       tags: vlans, d_vlans
       import_role:
-        name: vlans #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+        name: vlans #Role has module states configured to merged by default, to override, change the state_typeA_global variable in group_vars/all.yml
 
     - name: Configure L2_Interfaces
       tags: l2_interfaces, d_l2_interfaces, tr_d_l2_interfaces, acc_d_l2_interfaces
-      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+      import_role: #Role has module states configured to merged by default, to override, change the state_typeA_global variable in group_vars/all.yml
         name: l2_interfaces
 
     - name: Configure Management Interfaces
       tags: mgmt_interfaces, d_mgmt_interfaces
-      import_role: #Role has module states configured to merged by default, to override, use -e state_typeA=<statename>
+      import_role: #Role has module states configured to merged by default, to override, change the state_typeA_global variable in group_vars/all.yml
         name: mgmt_interfaces
 
   post_tasks:

@@ -3,6 +3,6 @@
     config:
       - name: "{{ item.value.name }}"
         vlan_id: "{{ item.value.vlan_id }}"
-    state: "{{ state_typeA }}"
+    state: "{{ item.value.state_typeA }}"
   loop: "{{ vlans | dict2items }}"
   register: vlans_conf
