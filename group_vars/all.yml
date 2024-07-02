@@ -9,12 +9,12 @@ users:
     secret: 9
     hashed_password: $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','~/.ssh/malaa.pub') }}"
+    sshkey: "{{ lookup('file','/home/malaa/.ssh/malaa.pub') }}"
     state: present #Set to absent to remove the ssh key for this user.
   test:
     privilege: 15
     secret: 9
     hashed_password: $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','~/.ssh/test.pub') }}"
+    sshkey: "{{ lookup('file','/home/malaa/.ssh/test.pub') }}"
     state: present #Set to absent to remove the ssh key for this user.
