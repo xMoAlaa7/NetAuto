@@ -9,12 +9,12 @@ users:
     secret: 9
     hashed_password: $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','/home/malaa/.ssh/malaa.pub') }}"
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSc0E9OtbOaVQDavZgBehVZQ3SY7AWkz02ADHrqT6q3CQspZQHB696rD7izVOajfTHXojgws/g6JGG/ktafH4OKmoWWcVr6Gipk3pwi3F0/0h6ES6Jn8EpDD+MMPjYRUx6/Qa+zvx2OOrl1fnfQwub1ZltqJSoN5fm5WeQHZhpPAHZnFUKFMAHKAt9cDHvq0JgnR6VoBmzBAv2Ve2GPXw+FCot5s+EqV6ljdevnuAtkDN2dq7tbtZ6wabdb+Qhvyik9IDLU2QBBDnxHVPMg5G+wOThZkm+O8MSkPzsflJdQ1c+OkgiFvlx5H/uNedrjiR2KVq3bhd6j6pVj537ZedC/TPoIlB95yB+rupVlUH6IfGJ+WqmovfbqYNpw13qSox0/cx2Im48Umjur4yFmbkjPTh+jNHscF59NesN8H6gr8rkJQX0JWUELSYHHa5Bx92IJH7FUOrcPP1z91OhzH0Wlpl1KsQS4pKM+JP5f89Nr6Mg9ogeN1NpktMbJ/JIXr0= malaa@localhost.localdomain"
     state: present #Set to absent to remove the ssh key for this user.
   test:
     privilege: 15
     secret: 9
     hashed_password: $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','/home/malaa/.ssh/test.pub') }}"
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaxcUqwJY6I4iW/MQ463m26YY9srGFdVIacrmjemMP6CMozres50ftyESv1NrxbFkROyJNlD1qAox6fWIQdC+Wq46DdrzaaENjOgyjGmagF7XoposhUOARZ6HHTYFeuCx4+E6R34HG6BqwZISlSCHgM6DaCgjriyVHfVIiQOuQCHA3z/sQMi8q408N81sWhpQbdvb9qpSK99qZWAhIqJtfOBrlJdQYjhXos6FYzgfRifiRbjmXriomWKnTfeoUsZKlsPzhg4YYbKhzVKAeRq+JJf2kiDEpmjq5UanxOLqgtpO6aE2uEFT6cFerG352tksQJwmKlFs8kbe4OlP6OsC8wEU+erZnfAz05tbcTluMMyYe6C12d1ksV5A2EYR6sMZJCiaCFn7cIw2VlEYcW8QwKdEaczIgWzCWuIm2UYKaIzgqh7PPIE3nZXQ+ywt+BZqJO+/pOmoXG3YCa9BkfJ5tzbH0jlW04Iqm+N5sVBn+LtXkJP39jQxkzpu2OTM21Gs= malaa@localhost.localdomain"
     state: present #Set to absent to remove the ssh key for this user.
