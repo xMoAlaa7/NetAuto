@@ -672,7 +672,7 @@ ansible-playbook SW_config_playbook.yml -k --limit AS2 --tags l2_interfaces --di
 
 Another method you can use is to rollback to the initial configuration using the restore_config_playbook -discussed later-, however, you should keep in mind that VLANs do not show up on the startup or running-config, therefore, won't be stored in the initial configuration backups taken, therefore, they will not be deleted using that method.
 
-## SW_config_playbook.yml
+## users_config_playbook.yml
 
 **IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/), [ios_user](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_user/)
 
