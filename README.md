@@ -231,7 +231,7 @@ This playbook's main objective is to configure DHCP and L3 Interfaces on Cisco r
     lines:
       - "network {{ item.value.network_id }}"
       - "default-router {{ item.value.default_router_ip }}"
-      - dns-server 8.8.4.4
+      - "dns-server {{ item.value.dns_server }}"
     parents: "ip dhcp pool {{ item.key }}"
   loop: "{{ pools | dict2items }}"
   register: dhcp_conf
@@ -267,14 +267,17 @@ pools:
     excluded_address: "10.10.100.1"
     default_router_ip: "10.10.100.1"
     network_id: "10.10.100.0 255.255.255.0"
+    dns_server: "8.8.8.8"
   IT:
     excluded_address: "10.10.90.1"
     default_router_ip: "10.10.90.1"
     network_id: "10.10.90.0 255.255.255.0"
+    dns_server: "8.8.8.8"
   OP:
     excluded_address: "10.10.110.1"
     default_router_ip: "10.10.110.1"
     network_id: "10.10.110.0 255.255.255.0"
+    dns_server: "8.8.8.8"
 
 interfaces:
   FastEthernet0/0.10:
@@ -310,7 +313,7 @@ This is done via the RO_confirmation role which uses the debug module to provide
       - "ip dhcp excluded-address {{ item.value.excluded_address }}"
       - "network {{ item.value.network_id }}"
       - "default-router {{ item.value.default_router_ip }}"
-      - "dns-server 8.8.8.8"
+      - "dns-server {{ item.value.dns_server }}"
   loop: "{{ pools | dict2items }}"
 
 - name: Displaying L3_Interfaces Configuration Information
@@ -329,6 +332,7 @@ This is done via the RO_confirmation role which uses the debug module to provide
   tags: always
   pause:
     prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."
+
 ```
 
 The prepend_info variable gives the reader awareness of whether any of the configurations in the dhcp or l3_interfaces roles are appended with no, therefore, prompting them to check these roles before applying the configuration.

@@ -7,7 +7,7 @@
       - "ip dhcp excluded-address {{ item.value.excluded_address }}"
       - "network {{ item.value.network_id }}"
       - "default-router {{ item.value.default_router_ip }}"
-      - "dns-server 8.8.8.8"
+      - "dns-server {{ item.value.dns_server }}"
   loop: "{{ pools | dict2items }}"
 
 - name: Displaying L3_Interfaces Configuration Information

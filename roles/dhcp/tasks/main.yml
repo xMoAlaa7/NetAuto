@@ -8,7 +8,7 @@
     lines:
       - "network {{ item.value.network_id }}"
       - "default-router {{ item.value.default_router_ip }}"
-      - dns-server 8.8.4.4
+      - "dns-server {{ item.value.dns_server }}"
     parents: "ip dhcp pool {{ item.key }}"
   loop: "{{ pools | dict2items }}"
   register: dhcp_conf
