@@ -9,7 +9,7 @@
     - name: Run the Confirmation Task #Skip this by using --skip-tags confirmation
       tags: always, confirmation
       include_role:
-        name: RO_confirmation
+        name: SW_confirmation
 
     - name: Backup Configuration
       tags: always
