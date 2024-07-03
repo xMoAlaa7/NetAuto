@@ -8,11 +8,11 @@ The desired network topology is as follows:
   <img src="images/Network_Topology.png" width="600" height="auto">
 </p>
 
-For more visibility into the topology, you can view the desired configurations if they were to be applied via the command line on each device [here]().
+For more visibility into the topology, you can view the desired configurations if they were to be applied via the command line on each device [here](https://github.com/xMoAlaa7/NetAuto/tree/main/desired_confs).
 
 # Setting up the Devices
 
-As per the topology design, to allow connectivity between the Ansible management node and the network devices, it is required to provide the configurations present [here]() for the network devices.
+As per the topology design, to allow connectivity between the Ansible management node and the network devices, it is required to provide the configurations present [here](https://github.com/xMoAlaa7/NetAuto/tree/main/initial_configs) for the network devices.
 
 For the Ansible management node, the Linux distribution used in this project is CentOS Stream 9. Steps required to configure the system is as follows:
 
@@ -168,7 +168,7 @@ Now we’re ready to dive into our playbooks.
 
 ## initial_config_playbook.yml
 
->**IOS modules used here are:** ios_config
+>**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/)
 
 This playbook creates a snapshot of the initial configuration that allows connectivity between the Ansible management node and the network devices. The aim of this playbook is to create a backup that can be later restored and can be used for comparison after applying configurations using other playbooks.
 
@@ -197,7 +197,7 @@ ansible-playbook initial_config_playbook.yml -k
 
 ## RO_config_playbook.yml
 
->**IOS modules used here are:** ios_config
+>**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/)
 
 This playbook's main objective is to configure DHCP and L3 Interfaces on Cisco routers. It imports both the dhcp and l3_interfaces roles which rely on iterating to configure the routers. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the router’s ansible_host name provided in the inventory file.
 
@@ -295,7 +295,7 @@ interfaces:
 
 ### Additional Capabilites:
 
-You can view the full playbook [here](), however, you'll notice that the playbook is much larger, this is because it has been appended with a couple capabilites that allows the admin to:
+You can view the full playbook [here](https://github.com/xMoAlaa7/NetAuto/blob/main/RO_config_playbook.yml), however, you'll notice that the playbook is much larger, this is because it has been appended with a couple capabilites that allows the admin to:
 
 1. Confirm changes before applying them:
 
@@ -480,7 +480,7 @@ Another method you can use is to rollback to the initial configuration using the
 
 ## SW_config_playbook.yml
 
-**IOS modules used here are:** ios_config, ios_vlans, ios_l2_interfaces, ios_l3_interfaces
+**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/), [ios_vlans](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_vlans/), [ios_l2_interfaces](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_l2_interfaces/), [ios_l3_interfaces](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_l3_interfaces/)
 
 This playbook's main objective is to configure VLANs, L2 Interfaces, and L3 Management Interfaces on Cisco switches. It imports  the vlans, l2_interfaces, mgmt_interfaces roles which rely on iterating to configure the switches. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the each switch's ansible_host name provided in the inventory file.
 
@@ -597,12 +597,12 @@ l2_interfaces:
 mgmt_ip_address: "10.10.90.204 255.255.255.0"
 ```
 
-To view the rest of the host variables files, click [here]()
+To view the rest of the host variables files, click [here](https://github.com/xMoAlaa7/NetAuto/tree/main/host_vars)
 
 >Note:
 >- If you want to add more vlans or more interfaces, simply follow the same formatting. If you also want to add more Cisco Switches, simply add them to the inventory file while following the same formatting and copy the host variables file of an existing switch -which one depends on the type of switch you're installing- then rename and edit as required.
 
-You can view the full playbook [here]() with the appended capabilites mentioned in RO_config_playbook. The only difference lies in the confirmation role.
+You can view the full playbook [here](https://github.com/xMoAlaa7/NetAuto/blob/main/SW_config_playbook.yml) with the appended capabilites mentioned in RO_config_playbook. The only difference lies in the confirmation role.
 
 *roles\SW_confirmation\tasks\main.yml*
 
@@ -656,7 +656,7 @@ You can view the full playbook [here]() with the appended capabilites mentioned 
 
 Removing configurations is easier/more automated in this playbook due to the capability of using states lying in the modules it uses.
 
-For more on how different states operate, click [here]().
+For more on how different states operate, click [here](https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html).
 
 States are assigned a variable state_typeA_global whose value is set to merged by default in the all.yml group variables file to prevent any changes from deleting whole parts of the configuration already existing on the switches. This variable is referenced by each host's variables file in a way that is designed to prevent any changes from affecting connectivity to the network devices.
 
@@ -674,7 +674,7 @@ Another method you can use is to rollback to the initial configuration using the
 
 ## SW_config_playbook.yml
 
-**IOS modules used here are:** ios_config, ios_user
+**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/), [ios_user](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_user/)
 
 This playbook's main objective is to configure users and add their respective public key to the network device. It contains two tasks which rely on iterating to configure the network devices. Iterations are applied on dictionaries containing the required configurations that are present in a groups_vars/all.yml file.
 
@@ -682,28 +682,9 @@ This playbook's main objective is to configure users and add their respective pu
 
 ```yaml
 ---
-#If you're going to prepend any lines with no, uncomment vars and prepend_info
 
 - hosts: all
-  #vars:
-    #prepend_info: Some
   gather_facts: false
-  pre_tasks:
-    - name: Run the Confirmation Task #Skip this by using --skip-tags confirmation
-      tags: always, confirmation
-      include_role:
-        name: RO_confirmation
-
-    - name: Backup Configuration
-      tags: always
-      cisco.ios.ios_config:
-        backup: true
-
-    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags compare
-      tags: always, compare
-      import_tasks:
-        file: tasks/compare_before_task.yml
-
   tasks:
     - name: Configure users
       tags: users, d_users
@@ -723,30 +704,6 @@ This playbook's main objective is to configure users and add their respective pu
             state: "{{ item.value.state }}"  #This will remove the key when set to absent.
       loop: "{{ users | dict2items }}"
       register: ssh_conf
-
-  post_tasks:
-    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags compare
-      tags: always, compare
-      import_tasks:
-        file: tasks/compare_after_task.yml
-
-    - name: Debug
-      tags: never, debug
-      block:
-        - name: Debug users
-          tags: debug, d_users
-          debug:
-            var: users_conf
-
-        - name: Debug ssh keys
-          tags: debug, d_users
-          debug:
-            var: ssh_conf
-
-    - name: Save Configurations
-      tags: never, save
-      import_role:
-        name: save
 ```
 
 *group_vars/all.yml*
@@ -776,7 +733,7 @@ users:
 
 >Note: If you want to add more users, simply follow the same formatting but keep in mind that the path of the SSH key varies according to where the user specified it to be.
 
-You can view the full playbook [here]() with the appended capabilites mentioned in RO_config_playbook. The only difference lies in the confirmation role.
+You can view the full playbook [here](https://github.com/xMoAlaa7/NetAuto/blob/main/users_config_playbook.yml) with the appended capabilites mentioned in RO_config_playbook. The only difference lies in the confirmation role.
 
 ```yaml
 - name: Displaying Users Configuration Information
@@ -809,7 +766,7 @@ Another method you can use is to rollback to the initial configuration using the
 
 ## data_playbook.yml
 
-**IOS modules used here are:** ios_config
+**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/)
 
 This playbook's main objective is to be used by an admin to compare the current running configuration on a network device against its respective initial configuration or to compare it against a specified configuration file.
 
@@ -866,7 +823,7 @@ This compares the running configuration of R1 against its initial configuration 
 
 ## restore_config_playbook.yml
 
-**IOS modules used here are:** ios_config, ios_command
+**IOS modules used here are:** [ios_config](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_config/), [ios_command](https://galaxy.ansible.com/ui/repo/published/cisco/ios/content/module/ios_command/)
 
 This playbook's main objective is to be used by an admin to restore the configuration of a network device to its respective initial configuration or to compare it against a specified configuration file. It also imports the save task to prompt the admin to save the restored configuration to the startup configuration.
 
@@ -905,3 +862,20 @@ This playbook's main objective is to be used by an admin to restore the configur
 ### Executing the Playbook:
 
 Executing this playbook is similar to how you'd execute the data_playbook, however, it's different in that it's imperative for this playbook that you specify tags as normally you wouldn't restore two configurations at the same time -the last one will naturally be the one restored-.
+
+>Note: When you execute this playbook, you're prompted to provide a username and a password. This username and password is the one used by the network device to access the configuration file placed on the Ansible management node via scp and replace its running configuration with it. Therefore, it's the Ansible management node's username and password.
+
+# Example Execution:
+
+As an example, we'll be executing the following command to illustrate the output.
+
+```console
+ansible-playbook RO_config_playbook.yml -k --tags all,save --diff
+```
+<p align="center">
+  <img src="images/1.png" width="600" height="auto">
+  <img src="images/2.png" width="600" height="auto">
+  <img src="images/3.png" width="600" height="auto">
+  <img src="images/4.png" width="600" height="auto">
+  <img src="images/5.png" width="600" height="auto">
+</p>
