@@ -5,7 +5,7 @@ The objective of this project is to be able to push, remove, and view configurat
 The desired network topology is as follows:
 
 <p align="center">
-  <img src="images/Network_Topology" width="600" height="auto">
+  <img src="images/Network_Topology.png" width="600" height="auto">
 </p>
 
 For more visibility into the topology, you can view the desired configurations if they were to be applied via the command line on each device [here]().
