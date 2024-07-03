@@ -860,9 +860,9 @@ ansible-playbook data_playbook.yml -e config_path=~/backup/R1_config.2024-07-01@
 
 This compares the running configuration of R1 against its initial configuration with the initial being the intended and compares the running configuration of R1 once again against the specified configuration with the specified being the intended.
 
-## SW_config_playbook.yml
+## restore_config_playbook.yml
 
-**IOS modules used here are:** ios_config, ios_user
+**IOS modules used here are:** ios_config
 
 This playbook's main objective is to be used by an admin to restore the configuration of a network device to its respective initial configuration or to compare it against a specified configuration file. It also imports the save task to prompt the admin to save the restored configuration to the startup configuration.
 
