@@ -1,0 +1,26 @@
+en
+conf terminal
+file prompt quiet
+ip dhcp pool IT
+network 10.10.90.0 255.255.255.0
+default-router 10.10.90.1
+dns-server 8.8.8.8
+exit
+ip dhcp excluded-address 10.10.90.1
+int fa0/0
+no shutdown
+interface fa0/0.20
+encapsulation dot1Q 20
+ip address 10.10.90.1 255.255.255.0
+exit
+username malaa priv 15 secret malaa
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name ansible.com
+crypto key generate rsa
+<USE 2048>
+ip ssh version 2
+end
+wr
