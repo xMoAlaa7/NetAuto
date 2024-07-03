@@ -348,7 +348,7 @@ The prepend_info variable gives the reader awareness of whether any of the confi
 
 3. Save changes to the startup configuration after applying:
 
-This is done via the save role which also uses the pause module offer the choice of continuing to run the playbook -therefore saving the configuration to the startup- or cancelling.
+This is done via the save role which also uses the pause module to offer the choice of continuing to run the playbook -therefore saving the configuration to the startup- or cancelling.
 
 *roles/save/tasks/main.yml*
 
