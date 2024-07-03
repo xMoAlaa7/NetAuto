@@ -4,8 +4,8 @@
   gather_facts: false
   tasks:
 #Intended-Config should be supplied by the user after confirming it works in the development environment.
-    - name: Test current Running-Config with supplied Intended-Config
-      tags: intended
+    - name: Test current Running-Config with the Initial Configuration (Intended-Config)
+      tags: initial
       cisco.ios.ios_config:
         diff_against: intended
         intended_config: "{{ lookup('file', '~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg') }}"

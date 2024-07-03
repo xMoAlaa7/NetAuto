@@ -53,6 +53,8 @@ pip install --upgrade pip
 pip install --user ansible-pylibssh
 ```
 
+>Note: The last three lines need to be repeated for each user on the Ansible management node.
+
 - Next, we’ll apply the LEGACY cryptographic policy in order to allow proper SSH communications to and from the network devices.
 
 ```console
@@ -68,12 +70,32 @@ ssh-keygen -t RSA
 
 >Note: Determine the path to be /home/malaa/.ssh/malaa and use a passphrase.
 
-- Next, we’ll have to enable one of the ciphers that work with IOS devices for some of the devices (for example R1) by editing the ~/.ssh/config file as follows: THIS STEP MAY NOT BE NECESSARY
+- Next, we’ll have to enable one of the ciphers that work with IOS devices for some of the devices (for example R1) by editing the ~/.ssh/config file as follows: THIS STEP MAY NOT BE NECESSARY, AND IF SO, IT HAS TO BE CONFIGURED FOR EACH USER.
  
+- Next, we'll	create and edit a new user specific config file in ~/.ssh/ called ‘config’. 
+
+```console
+vim ~/.ssh/config
+```
+
+- Add the following lines:
+
+```init
+Host github.com
+        HostName github.com
+        IdentityFile ~/.ssh/malaa
+```
+
+- Next, configure the username and email that'll be used for GitHub.
+
+```console
+git config --global user.name "Mohamed Alaa"
+git config --global user.email "moalaaeldeen7@gmail.com"
+```
+
 - Next, we’ll upload the public key to GitHub and clone the repository via the SSH URL using git clone \<url\>.
 
 - Finally, connect to each device via SSH to establish authenticity and fill the ~/.ssh/known_hosts file.
-
 
 Now that all the devices are ready, it’s time to configure Ansible itself.
 
@@ -125,14 +147,14 @@ users:
     secret: 9
     hashed_password: $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','~/.ssh/malaa.pub') }}"
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSc0E9OtbOaVQDavZgBehVZQ3SY7AWkz02ADHrqT6q3CQspZQHB696rD7izVOajfTHXojgws/g6JGG/ktafH4OKmoWWcVr6Gipk3pwi3F0/0h6ES6Jn8EpDD+MMPjYRUx6/Qa+zvx2OOrl1fnfQwub1ZltqJSoN5fm5WeQHZhpPAHZnFUKFMAHKAt9cDHvq0JgnR6VoBmzBAv2Ve2GPXw+FCot5s+EqV6ljdevnuAtkDN2dq7tbtZ6wabdb+Qhvyik9IDLU2QBBDnxHVPMg5G+wOThZkm+O8MSkPzsflJdQ1c+OkgiFvlx5H/uNedrjiR2KVq3bhd6j6pVj537ZedC/TPoIlB95yB+rupVlUH6IfGJ+WqmovfbqYNpw13qSox0/cx2Im48Umjur4yFmbkjPTh+jNHscF59NesN8H6gr8rkJQX0JWUELSYHHa5Bx92IJH7FUOrcPP1z91OhzH0Wlpl1KsQS4pKM+JP5f89Nr6Mg9ogeN1NpktMbJ/JIXr0= malaa@localhost.localdomain"
     state: present #Set to absent to remove the ssh key for this user.
   test:
     privilege: 15
     secret: 9
     hashed_password: $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
     disabled: username #Set to no username to remove.
-    sshkey: "{{ lookup('file','~/.ssh/test.pub') }}"
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaxcUqwJY6I4iW/MQ463m26YY9srGFdVIacrmjemMP6CMozres50ftyESv1NrxbFkROyJNlD1qAox6fWIQdC+Wq46DdrzaaENjOgyjGmagF7XoposhUOARZ6HHTYFeuCx4+E6R34HG6BqwZISlSCHgM6DaCgjriyVHfVIiQOuQCHA3z/sQMi8q408N81sWhpQbdvb9qpSK99qZWAhIqJtfOBrlJdQYjhXos6FYzgfRifiRbjmXriomWKnTfeoUsZKlsPzhg4YYbKhzVKAeRq+JJf2kiDEpmjq5UanxOLqgtpO6aE2uEFT6cFerG352tksQJwmKlFs8kbe4OlP6OsC8wEU+erZnfAz05tbcTluMMyYe6C12d1ksV5A2EYR6sMZJCiaCFn7cIw2VlEYcW8QwKdEaczIgWzCWuIm2UYKaIzgqh7PPIE3nZXQ+ywt+BZqJO+/pOmoXG3YCa9BkfJ5tzbH0jlW04Iqm+N5sVBn+LtXkJP39jQxkzpu2OTM21Gs= malaa@localhost.localdomain"
     state: present #Set to absent to remove the ssh key for this user.
 ```
 
@@ -140,7 +162,7 @@ users:
 
 Now we’re ready to dive into our playbooks.
 
-# Playbooks:
+# Playbooks
 
 ## initial_config_playbook.yml
 
@@ -173,9 +195,9 @@ ansible-playbook initial_config_playbook.yml -k
 
 ## RO_config_playbook.yml
 
->*IOS modules used here are:* ios_config
+>**IOS modules used here are:** ios_config
 
-This playbook's main task is to configure DHCP and L3 Interfaces on Cisco routers. It imports both the dhcp and l3_interfaces roles which rely on iterating to configure the routers. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the router’s ansible_host name provided in the inventory file.
+This playbook's main objective is to configure DHCP and L3 Interfaces on Cisco routers. It imports both the dhcp and l3_interfaces roles which rely on iterating to configure the routers. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the router’s ansible_host name provided in the inventory file.
 
 *RO_config_playbook.yml*
 
@@ -376,7 +398,7 @@ Method 2: Using the compare_before_task and compare_after_task tasks which make 
       dir_path: backup/compare_confs
 ```
 
-*tasks/compre_after_task.yml*
+*tasks/compare_after_task.yml*
 
 ```yaml
 - name: Compare with Previous Configuration
@@ -452,9 +474,9 @@ Another method you can use is to rollback to the initial configuration using the
 
 ## SW_config_playbook.yml
 
-IOS modules used here are: ios_config, ios_vlans, ios_l2_interfaces, ios_l3_interfaces
+**IOS modules used here are:** ios_config, ios_vlans, ios_l2_interfaces, ios_l3_interfaces
 
-This playbook's main task is to configure VLANs, L2 Interfaces, and L3 Management Interfaces on Cisco switches. It imports  the vlans, l2_interfaces, mgmt_interfaces roles which rely on iterating to configure the switches. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the each switch's ansible_host name provided in the inventory file.
+This playbook's main objective is to configure VLANs, L2 Interfaces, and L3 Management Interfaces on Cisco switches. It imports  the vlans, l2_interfaces, mgmt_interfaces roles which rely on iterating to configure the switches. Iterations are applied on dictionaries containing the required configurations that are present in a host_vars file named after the each switch's ansible_host name provided in the inventory file.
 
 *SW_config_playbook.yml*
 
@@ -643,3 +665,237 @@ ansible-playbook SW_config_playbook.yml -k --limit AS2 --tags l2_interfaces --di
 ```
 
 Another method you can use is to rollback to the initial configuration using the restore_config_playbook -discussed later-, however, you should keep in mind that VLANs do not show up on the startup or running-config, therefore, won't be stored in the initial configuration backups taken, therefore, they will not be deleted using that method.
+
+## SW_config_playbook.yml
+
+**IOS modules used here are:** ios_config, ios_user
+
+This playbook's main objective is to configure users and add their respective public key to the network device. It contains two tasks which rely on iterating to configure the network devices. Iterations are applied on dictionaries containing the required configurations that are present in a groups_vars/all.yml file.
+
+*users_config_playbook.yml*
+
+```yaml
+---
+#If you're going to prepend any lines with no, uncomment vars and prepend_info
+
+- hosts: all
+  #vars:
+    #prepend_info: Some
+  gather_facts: false
+  pre_tasks:
+    - name: Run the Confirmation Task #Skip this by using --skip-tags confirmation
+      tags: always, confirmation
+      include_role:
+        name: RO_confirmation
+
+    - name: Backup Configuration
+      tags: always
+      cisco.ios.ios_config:
+        backup: true
+
+    - name: Run the Backup for Comparison (Before) Task #Skip this by using --skip-tags compare
+      tags: always, compare
+      import_tasks:
+        file: tasks/compare_before_task.yml
+
+  tasks:
+    - name: Configure users
+      tags: users, d_users
+      cisco.ios.ios_config:
+        lines:
+          - "{{ item.value.disabled }} {{ item.key }} priv {{ item.value.privilege }} secret {{ item.value.secret }} {{ item.value.hashed_password }}"
+      loop: "{{ users | dict2items }}"
+      register: users_conf
+
+    - name: Configure SSH keys
+      tags: users, d_users
+      no_log: false
+      cisco.ios.ios_user:
+        aggregate:
+          - name: "{{ item.key }}"
+            sshkey: "{{ item.value.sshkey }}"
+            state: "{{ item.value.state }}"  #This will remove the key when set to absent.
+      loop: "{{ users | dict2items }}"
+      register: ssh_conf
+
+  post_tasks:
+    - name: Run the Compare with Previous Configuration Task #Skip this by using --skip-tags compare
+      tags: always, compare
+      import_tasks:
+        file: tasks/compare_after_task.yml
+
+    - name: Debug
+      tags: never, debug
+      block:
+        - name: Debug users
+          tags: debug, d_users
+          debug:
+            var: users_conf
+
+        - name: Debug ssh keys
+          tags: debug, d_users
+          debug:
+            var: ssh_conf
+
+    - name: Save Configurations
+      tags: never, save
+      import_role:
+        name: save
+```
+
+*group_vars/all.yml*
+
+```yaml
+ansible_connection: ansible.netcommon.network_cli
+ansible_network_os: cisco.ios.ios
+state_typeA_global: merged
+prepend_info: None
+
+users:
+  malaa:
+    privilege: 15
+    secret: 9
+    hashed_password: $9$jRNqe2Di2gdJIt$/IIA8SceE97JMLahfTU/0LQvMld/Sokg/tmFtM0zDm.
+    disabled: username #Set to no username to remove.
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSc0E9OtbOaVQDavZgBehVZQ3SY7AWkz02ADHrqT6q3CQspZQHB696rD7izVOajfTHXojgws/g6JGG/ktafH4OKmoWWcVr6Gipk3pwi3F0/0h6ES6Jn8EpDD+MMPjYRUx6/Qa+zvx2OOrl1fnfQwub1ZltqJSoN5fm5WeQHZhpPAHZnFUKFMAHKAt9cDHvq0JgnR6VoBmzBAv2Ve2GPXw+FCot5s+EqV6ljdevnuAtkDN2dq7tbtZ6wabdb+Qhvyik9IDLU2QBBDnxHVPMg5G+wOThZkm+O8MSkPzsflJdQ1c+OkgiFvlx5H/uNedrjiR2KVq3bhd6j6pVj537ZedC/TPoIlB95yB+rupVlUH6IfGJ+WqmovfbqYNpw13qSox0/cx2Im48Umjur4yFmbkjPTh+jNHscF59NesN8H6gr8rkJQX0JWUELSYHHa5Bx92IJH7FUOrcPP1z91OhzH0Wlpl1KsQS4pKM+JP5f89Nr6Mg9ogeN1NpktMbJ/JIXr0= malaa@localhost.localdomain"
+    state: present #Set to absent to remove the ssh key for this user.
+  test:
+    privilege: 15
+    secret: 9
+    hashed_password: $9$iMshSdwwDdrTE2$.qzRj/zrcOrVAHr3B2J7e9jQv.cU.gKx2C3x/YEUIe6
+    disabled: username #Set to no username to remove.
+    sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaxcUqwJY6I4iW/MQ463m26YY9srGFdVIacrmjemMP6CMozres50ftyESv1NrxbFkROyJNlD1qAox6fWIQdC+Wq46DdrzaaENjOgyjGmagF7XoposhUOARZ6HHTYFeuCx4+E6R34HG6BqwZISlSCHgM6DaCgjriyVHfVIiQOuQCHA3z/sQMi8q408N81sWhpQbdvb9qpSK99qZWAhIqJtfOBrlJdQYjhXos6FYzgfRifiRbjmXriomWKnTfeoUsZKlsPzhg4YYbKhzVKAeRq+JJf2kiDEpmjq5UanxOLqgtpO6aE2uEFT6cFerG352tksQJwmKlFs8kbe4OlP6OsC8wEU+erZnfAz05tbcTluMMyYe6C12d1ksV5A2EYR6sMZJCiaCFn7cIw2VlEYcW8QwKdEaczIgWzCWuIm2UYKaIzgqh7PPIE3nZXQ+ywt+BZqJO+/pOmoXG3YCa9BkfJ5tzbH0jlW04Iqm+N5sVBn+LtXkJP39jQxkzpu2OTM21Gs= malaa@localhost.localdomain"
+    state: present #Set to absent to remove the ssh key for this user.
+```
+
+>Note: If you want to add more users, simply follow the same formatting but keep in mind that the path of the SSH key varies according to where the user specified it to be.
+
+You can view the full playbook [here]() with the appended capabilites mentioned in RO_config_playbook. The only difference lies in the confirmation role.
+
+```yaml
+- name: Displaying Users Configuration Information
+  tags: users, d_users
+  debug:
+    msg:
+      - "{{ item.value.disabled }} {{ item.key }} priv {{ item.value.privilege }} secret {{ item.value.secret }} {{ item.value.hashed_password }}"
+      - "State is set to {{ item.value.state }} for the next lines."
+      - "ip ssh pubkey-chain"
+      - "username {{ item.key }}"
+      - "key-string"
+      - "Public key inserted here"
+  loop: "{{ users | dict2items }}"
+
+- name: Confirmation
+  tags: always
+  pause:
+    prompt: "You're about to apply the previous configurations. To abort click CTRL+C then A, to continue, click Enter."
+```
+
+### Removing Configurations:
+
+Removing configurations here can be done via editing the group_vars\all.yml file as follows:
+
+- To remove a user, simply append a no to the disabled key's value in the user's dictionary.
+
+- To remove the user's SSH key, simply set the state's value in the user's dictionary to absent.
+
+Another method you can use is to rollback to the initial configuration using the restore_config_playbook -discussed later-.
+
+## data_playbook.yml
+
+**IOS modules used here are:** ios_config
+
+This playbook's main objective is to be used by an admin to compare the current running configuration on a network device against its respective initial configuration or to compare it against a specified configuration file.
+
+>Note: As a reminder, VLANs do not show up on the startup or running-config, therefore, won't be stored in the initial configuration backups taken or any configuration file for that matter, therefore, comparison will be sort of inaccurate in this case. However, you have the option to use debugging when executing the playbook which will show the before and after configuration changes in detail.
+
+*data_playbook.yml*
+
+```yaml
+---
+
+- hosts: all
+  gather_facts: false
+  tasks:
+#Intended-Config should be supplied by the user after confirming it works in the development environment.
+    - name: Test current Running-Config with the Initial Configuration (Intended-Config)
+      tags: initial
+      cisco.ios.ios_config:
+        diff_against: intended
+        intended_config: "{{ lookup('file', '~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg') }}"
+
+#config_path should be specified by the user during playbook run.
+    - name: Test current Running-Config with Config specified by user (Intended-Config).
+      tags: specify
+      cisco.ios.ios_config:
+        diff_against: intended
+        intended_config: "{{ lookup('file', '{{ config_path }}') }}"
+```
+
+### Executing the Playbook:
+
+This playbook can be executed in two different ways:
+
+-Either you specify --tags initial or --tags specify -e \<configuration file path\> --limit \<network device host name\>
+
+```console
+ansible-playbook data_playbook.yml --tags initial
+```
+
+This compares the running configuration of each device against its initial configuration with the initial being the intended.
+
+```console
+ansible-playbook data_playbook.yml --tags specify -e config_path=~/backup/R1_config.2024-07-01@13:36:28 --limit R1
+```
+
+This compares the running configuration of R1 against the specified configuration with the specified being the intended.
+
+-You can also not use tags at all but you'll still have to specify the config_path variable and you'll have to limit your hosts to the host which the specified configuration file applies to.
+
+```console
+ansible-playbook data_playbook.yml -e config_path=~/backup/R1_config.2024-07-01@13:36:28 --limit R1
+```
+
+This compares the running configuration of R1 against its initial configuration with the initial being the intended and compares the running configuration of R1 once again against the specified configuration with the specified being the intended.
+
+## SW_config_playbook.yml
+
+**IOS modules used here are:** ios_config, ios_user
+
+This playbook's main objective is to be used by an admin to restore the configuration of a network device to its respective initial configuration or to compare it against a specified configuration file. It also imports the save task to prompt the admin to save the restored configuration to the startup configuration.
+
+>Note: As a reminder, VLANs do not show up on the startup or running-config, therefore, won't be stored in the initial configuration backups taken or any configuration file for that matter, therefore, restoration by this playbook isn't a full one, however, you have to option to re-execute playbooks or even restore the repository to a previous version from GitHub and re-execute playbooks.
+
+*restore_config_playbook.yml*
+
+```yaml
+---
+
+- hosts: all
+  gather_facts: false
+  vars_prompt:
+    - name: ans_us
+      prompt: Insert Ansible Username
+
+    - name: ans_pass
+      prompt: Insert Ansible Password
+
+  tasks:
+    - name: Restoring Configurations to Initial
+      tags: initial
+      cisco.ios.ios_command:
+        commands: 'configure replace scp://{{ ans_us }}:{{ ans_pass }}@10.10.90.16/~/NetAuto/backup/initial_confs/{{ inventory_hostname }}_IC.cfg force'
+
+    - name: Restoring Configurations to Specified
+      tags: specify
+      cisco.ios.ios_command:
+        commands: 'configure replace scp://{{ ans_us }}:{{ ans_pass }}@10.10.90.16/{{ config_path }} force'
+
+    - name: Run the Save Configurations Task
+      import_role:
+        name: save
+```
+
+### Executing the Playbook:
+
+Executing this playbook is similar to how you'd execute the data_playbook, however, it's different in that it's imperative for this playbook that you specify tags as normally you wouldn't restore two configurations at the same time -the last one will naturally be the one restored-.
