@@ -862,7 +862,7 @@ This compares the running configuration of R1 against its initial configuration 
 
 ## restore_config_playbook.yml
 
-**IOS modules used here are:** ios_config
+**IOS modules used here are:** ios_config, ios_command
 
 This playbook's main objective is to be used by an admin to restore the configuration of a network device to its respective initial configuration or to compare it against a specified configuration file. It also imports the save task to prompt the admin to save the restored configuration to the startup configuration.
 
