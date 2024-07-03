@@ -1,0 +1,33 @@
+en
+conf terminal
+file prompt quiet
+vlan 30
+name Servers
+vlan 20
+name IT
+int e0/0
+sw trunk encapsulation dot1q
+sw mode trunk
+sw trunk allowed vlan 30,20
+int e0/1
+sw mode ac
+sw ac vlan 30
+int vlan 20
+ip add 10.10.90.205 255.255.255.0
+no sh
+exit
+username malaa priv 15 secret malaa
+line vty 0 4
+login local
+transport input ssh
+exit
+ip domain-name ansible.com
+crypto key generate rsa
+<USE 2048>
+ip ssh version 2
+ip ssh pubkey-chain
+username malaa
+keystring
+<PUBLIC KEY>
+end
+wr
