@@ -1,6 +1,6 @@
 # Description
 
-The objective of this project is to be able to push, remove, and view configurations safely on network devices by executing Ansible Playbooks via an Ansible managed node.
+The objective of this project is to be able to push, remove, and view configurations safely on network devices by executing Ansible Playbooks via an Ansible management node.
 
 The desired network topology is as follows:
 
